@@ -19,7 +19,7 @@ setup(name='datamagus',
       classifiers=[
           'Intended Audience :: Developers',
           'Operating System :: OS Independent',
-          'Programming Language :: Python :: 3.8.5',
+          'Programming Language :: Python :: 3.8',
           'Topic :: Utilities'
       ],
       keywords='',
