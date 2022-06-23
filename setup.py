@@ -14,7 +14,9 @@ setup(name='datamagus',
         'matplotlib>=3.3.2',
         'seaborn>=0.11.0',
         'numpy>=1.21.2',
-        'pandas>=1.3.3'
+        'pandas>=1.3.3',
+        'flask>=1.1.4',
+        'flasgger>=0.9.5'
       ],
       classifiers=[
           'Intended Audience :: Developers',
