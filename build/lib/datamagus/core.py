@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 from datamagus.vis import *
+# from .vis import *
 
 class DataMagus(object):
     def __init__(self):
