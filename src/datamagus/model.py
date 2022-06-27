@@ -65,10 +65,16 @@ class RFMModel(BaseModel):
     def metrics(self,mlist:list):
         """
         Example:
-        R<90,1
-        90<=R<180,2
+        R<90,5
+        90<=R<180,4
         ...
-        R>=720,5
+        R>=720,
+        R(reverse)
+        ----
+        F<2,1
+        2<=F<4,2
+        ...
+        F>=5,5
         >>>  mlist=[[90,180,360,720],[2,3,4,5],[100,200,500,1000]]
         """
         if isinstance(mlist,mlist) and len(mlist)==3:
@@ -80,11 +86,12 @@ class RFMModel(BaseModel):
     def metrics(self):
         del self._metrics
 
-    def get_rfm(self,df:pd.DataFrame=None,its:list=None,t:str=None):
-        if df is not None and isinstance(df,pd.DataFrame):
+    def get_rfm(self,df,its:list=None,t:str=None,s:str=None):
+        if isinstance(df,pd.DataFrame):
             self.df=df.copy()
         if its is None:
             self.rfm=self.df
+            self.rfm.columns=['id','R','F','M']
         elif isinstance(its,list) and len(its)==3:
             _tmp=self.df.loc[:,its]
             _tmp.columns=['id','time','cost']
@@ -95,6 +102,9 @@ class RFMModel(BaseModel):
                 t=dt.datetime.now()
             else:
                 t=dt.datetime.strptime(t,'%Y-%m-%d')
+            if s is not None:
+                s=dt.datetime.strptime(s,'%Y-%m-%d')
+                _tmp=_tmp.loc[_tmp['time']>=s,:]
             _tmp['R']=(t-_tmp['time']).dt.days
             R =_tmp.groupby(by=['id'])['R'].agg([('R','min')])
             F =_tmp.groupby(by=['id'])['id'].agg([('F','count')])

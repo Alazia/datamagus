@@ -2,7 +2,7 @@ from distutils.core import setup
 from setuptools import find_packages
 
 setup(name='datamagus', 
-      version='0.0.1a', 
+      version='0.0.2', 
       description='Data analysis',
       long_description='Packages and API interface for basic data analysis\
          processing, graphing and modeling, and practical use.',
