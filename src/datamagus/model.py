@@ -6,10 +6,6 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-
-
-
-
 class BaseModel(DataMagus):
     def __init__(self):
         super().__init__()
@@ -25,7 +21,7 @@ class RFMModel(BaseModel):
     df from https://www.kaggle.com/datasets/regivm/retailtransactiondata?select=Retail_Data_Transactions.csv
    
     >>> rfm=RFMModel()
-    >>> df
+    >>> df=pd.read_csv('../test/Data_Transactions.csv')
      customer_id trans_date  tran_amount
     0           CS5295  11-Feb-13           35
     1           CS4768  15-Mar-15           39
