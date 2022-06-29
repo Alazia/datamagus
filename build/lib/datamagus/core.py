@@ -61,9 +61,12 @@ class DataMagus(object):
         """
         return pd.Series.describe(pd.Series(self._df.unstack().tolist()))
     
-    def density_df(self):
+    def density_df(self,savefig=False):
         plot_setting(title='density')
         plot_density(self._df)
+        if savefig:plot_savefig(title='DM_density')
+            
+
         
         
 
