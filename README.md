@@ -9,7 +9,7 @@ pip install datamagus
 ```
 
 ## Model
-```
+```python
 # RFM Example
 # https://www.kaggle.com/datasets/regivm/retailtransactiondata?select=Retail_Data_Transactions.csv
 >>> from datamagus.model import RFMModel
@@ -18,7 +18,7 @@ pip install datamagus
     customer_id trans_date  tran_amount
 0           CS5295  11-Feb-13           35
 1           CS4768  15-Mar-15           39
->>> rfm.get_rfm(df,its=list(df.columns),t="2022-06-27")
+>>> rfm.get_rfm(df,its=['customer_id','trans_date','tran_amount'],t="2022-06-27")
 >>> rfm.rfm
     id     R   F       M
 0     CS1112  2721  15  1012.0
@@ -42,9 +42,13 @@ Example 2:
 >>> rfm.get_rfm(df)
 >>> rfm.fit()
 >>> rfm.rfm_score
- R   F     M  R_score  F_score  M_score     RFM
+    R   F     M  R_score  F_score  M_score     RFM
 id                                                   
 1      1  93  3841        2        2        1  一般价值客户
 2      6  86  1833        1        2        1  一般保持客户
 3      7  31  4474        1        1        1  一般挽留客户
+>>> rfm.show()
 ```
+**RFM Visualization**
+![RFM_donut](/data/pic/RFM_donut.png)
+![RFM_bar](/data/pic/RFM_bar.png)

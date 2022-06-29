@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import datetime as dt
 from datamagus.core import DataMagus
+from datamagus.vis import *
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -9,23 +10,25 @@ warnings.filterwarnings("ignore")
 class BaseModel(DataMagus):
     def __init__(self):
         super().__init__()
-        self._res=None
 
     def fit(self):
+        pass
+
+    def show(self):
         pass
 
 
 class RFMModel(BaseModel):
     """
-    Example 1:
-    df from https://www.kaggle.com/datasets/regivm/retailtransactiondata?select=Retail_Data_Transactions.csv
-   
+    Example 1:   
     >>> rfm=RFMModel()
-    >>> df=pd.read_csv('../test/Data_Transactions.csv')
+    >>> df=pd.read_csv('https://raw.githubusercontent.com\
+        /Alazia/datamagus/main/src/test/Retail_Data_Transactions.csv')
      customer_id trans_date  tran_amount
     0           CS5295  11-Feb-13           35
     1           CS4768  15-Mar-15           39
-    >>> rfm.get_rfm(df,its=list(df.columns),t="2022-06-27")
+    >>> rfm.get_rfm(df,its=['customer_id','trans_date','tran_amount'],\
+        t="2022-06-27")
     >>> rfm.rfm
         id     R   F       M
     0     CS1112  2721  15  1012.0
@@ -49,7 +52,12 @@ class RFMModel(BaseModel):
     >>> rfm.get_rfm(df)
     >>> rfm.fit()
     >>> rfm.rfm_score
-
+        R   F     M  R_score  F_score  M_score     RFM
+    id                                                   
+    1      3  62  2029        2        2        1  一般价值客户
+    2      9  77  5028        1        2        1  一般保持客户
+    3      8  86  4399        1        2        1  一般保持客户
+    >>> rfm.show()
     """
 
     def __init__(self,its=None,metrics=None):
@@ -110,7 +118,6 @@ class RFMModel(BaseModel):
             F =_tmp.groupby(by=['id'])['id'].agg([('F','count')])
             M =_tmp.groupby(by=['id'])['cost'].agg([('M',sum)])
             self.rfm= R.join(F).join(M).reset_index()
-    
               
     @staticmethod
     def between_score(x,ref:list,reverse=False):
@@ -143,7 +150,6 @@ class RFMModel(BaseModel):
                         if ref[i-1]<=x<ref[i]:
                             return len(ref)+1-i
 
-
     def fit(self):
         self.rfm.set_index(self.rfm.columns[0],inplace=True)
         if self._metrics is None:
@@ -170,4 +176,24 @@ class RFMModel(BaseModel):
                 "211":"一般发展客户",
                 "111":"一般挽留客户"
             })
-  
+    
+    def show(self,method='all',savefig=False,colors=None,**kwargs):
+        #TODO:donut,bar
+        _rfm=self.rfm_score['RFM'].value_counts().\
+            sort_values(ascending=False).reset_index()
+        if method=='donut':
+            plot_setting()
+            plot_donut(_rfm,label='index',value='RFM',colors=colors)
+            if savefig:plot_savefig(title='RFM_donut',**kwargs)
+        elif method=='bar':
+            plot_setting(fig1=10,fig2=6)
+            plot_bar(_rfm,x='index',height='RFM')
+            if savefig:plot_savefig(title='RFM_bar',**kwargs)
+        else:
+            plot_setting()
+            plot_donut(_rfm,label='index',value='RFM',colors=colors)
+            if savefig:plot_savefig(title='RFM_donut',**kwargs)
+            plot_setting(fig1=10,fig2=6)
+            plot_bar(_rfm,x='index',height='RFM')
+            if savefig:plot_savefig(title='RFM_bar',**kwargs)
+      
