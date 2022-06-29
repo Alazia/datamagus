@@ -2,8 +2,6 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import seaborn as sns
 import pandas as pd
-plt.rcParams['font.family'] = ['sans-serif']
-plt.rcParams['font.sans-serif'] = ['SimHei']
 
 def plot_setting(title=None,x_text='',y_text='',
                  fig1=5,fig2=5,labelsize=10):
@@ -39,3 +37,4 @@ def plot_donut(df:pd.DataFrame,label,value,colors=None):
         colors=colors,pctdistance=0.85)
     plt.pie([1],radius=0.7,colors='white')
     plt.legend(handles=patches,frameon=False,bbox_to_anchor=(0.5,0.1,1,1))
+

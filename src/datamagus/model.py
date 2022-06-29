@@ -11,10 +11,16 @@ class BaseModel(DataMagus):
     def __init__(self):
         super().__init__()
 
-    def fit(self):
+    def load_data(self,df:pd.DataFrame):
+        if isinstance(df,pd.DataFrame):
+            self.df=df.copy()
+        else:
+            TypeError("Incorrect input")
+
+    def unleash(self):
         pass
 
-    def show(self):
+    def visualize(self):
         pass
 
 
@@ -27,15 +33,15 @@ class RFMModel(BaseModel):
      customer_id trans_date  tran_amount
     0           CS5295  11-Feb-13           35
     1           CS4768  15-Mar-15           39
-    >>> rfm.get_rfm(df,its=['customer_id','trans_date','tran_amount'],\
+    >>> rfm.load_data(df,its=['customer_id','trans_date','tran_amount'],\
         t="2022-06-27")
     >>> rfm.rfm
         id     R   F       M
     0     CS1112  2721  15  1012.0
     1     CS1113  2695  20  1490.0
     2     CS1114  2692  19  1432.0
-    >>> rfm.fit()
-    >>> rfm.rfm_score
+    >>> rfm.unleash()
+    >>> rfm.res
         R   F       M  R_score  F_score  M_score     RFM
     id                                                         
     CS1112  2721  15  1012.0        2        1        1  一般发展客户
@@ -49,21 +55,20 @@ class RFMModel(BaseModel):
     'M': np.random.randint(1000, 10000, 10000),
     })
     >>> rfm=RFMModel()
-    >>> rfm.get_rfm(df)
-    >>> rfm.fit()
-    >>> rfm.rfm_score
+    >>> rfm.load_data(df)
+    >>> rfm.unleash()
+    >>> rfm.res
         R   F     M  R_score  F_score  M_score     RFM
     id                                                   
     1      3  62  2029        2        2        1  一般价值客户
     2      9  77  5028        1        2        1  一般保持客户
     3      8  86  4399        1        2        1  一般保持客户
-    >>> rfm.show()
+    >>> rfm.visualize()
     """
 
-    def __init__(self,its=None,metrics=None):
+    def __init__(self,metrics=None):
         super().__init__()
         self._metrics=metrics
-        if its is not None:self.getrfm(its)
 
     @property
     def metrics(self):
@@ -85,7 +90,7 @@ class RFMModel(BaseModel):
         F>=5,5
         >>>  mlist=[[90,180,360,720],[2,3,4,5],[100,200,500,1000]]
         """
-        if isinstance(mlist,mlist) and len(mlist)==3:
+        if isinstance(mlist,list) and len(mlist)==3:
             self._metrics=mlist
         else:
             raise TypeError("Object is not mlist")
@@ -94,7 +99,7 @@ class RFMModel(BaseModel):
     def metrics(self):
         del self._metrics
 
-    def get_rfm(self,df,its:list=None,t:str=None,s:str=None):
+    def load_data(self,df,its:list=None,t:str=None,s:str=None):
         if isinstance(df,pd.DataFrame):
             self.df=df.copy()
         if its is None:
@@ -118,6 +123,8 @@ class RFMModel(BaseModel):
             F =_tmp.groupby(by=['id'])['id'].agg([('F','count')])
             M =_tmp.groupby(by=['id'])['cost'].agg([('M',sum)])
             self.rfm= R.join(F).join(M).reset_index()
+        else:
+            TypeError("Incorrect input")
               
     @staticmethod
     def between_score(x,ref:list,reverse=False):
@@ -150,23 +157,23 @@ class RFMModel(BaseModel):
                         if ref[i-1]<=x<ref[i]:
                             return len(ref)+1-i
 
-    def fit(self):
+    def unleash(self):
         self.rfm.set_index(self.rfm.columns[0],inplace=True)
         if self._metrics is None:
             self._metrics=[[elem] for elem in self.rfm.mean()]
             _tmp_flag=True
-        self.rfm_score=self.rfm.copy()
-        self.rfm_score['R_score']=self.rfm_score['R'].apply(lambda x:\
+        self.res=self.rfm.copy()
+        self.res['R_score']=self.res['R'].apply(lambda x:\
             self.between_score(x,ref=self._metrics[0],reverse=True))
-        self.rfm_score['F_score']=self.rfm_score['F'].apply(lambda x:\
+        self.res['F_score']=self.res['F'].apply(lambda x:\
             self.between_score(x,ref=self._metrics[1]))
-        self.rfm_score['M_score']=self.rfm_score['M'].apply(lambda x:\
+        self.res['M_score']=self.res['M'].apply(lambda x:\
             self.between_score(x,ref=self._metrics[2]))
-        self.rfm_score['RFM']=self.rfm_score['R_score'].astype(str)+\
-            self.rfm_score['F_score'].astype(str)+\
-                self.rfm_score['M_score'].astype(str)
+        self.res['RFM']=self.res['R_score'].astype(str)+\
+            self.res['F_score'].astype(str)+\
+                self.res['M_score'].astype(str)
         if _tmp_flag:
-            self.rfm_score['RFM']=self.rfm_score['RFM'].map({
+            self.res['RFM']=self.res['RFM'].map({
                 "222":"重要价值客户",
                 "122":"重要保持客户",
                 "212":"重要发展客户",
@@ -177,9 +184,10 @@ class RFMModel(BaseModel):
                 "111":"一般挽留客户"
             })
     
-    def show(self,method='all',savefig=False,colors=None,**kwargs):
-        #TODO:donut,bar
-        _rfm=self.rfm_score['RFM'].value_counts().\
+    def visualize(self,method='all',savefig=False,colors=None,**kwargs):
+        plt.rcParams['font.family'] = ['sans-serif']
+        plt.rcParams['font.sans-serif'] = ['SimHei']
+        _rfm=self.res['RFM'].value_counts().\
             sort_values(ascending=False).reset_index()
         if method=='donut':
             plot_setting()
@@ -196,4 +204,99 @@ class RFMModel(BaseModel):
             plot_setting(fig1=10,fig2=6)
             plot_bar(_rfm,x='index',height='RFM')
             if savefig:plot_savefig(title='RFM_bar',**kwargs)
-      
+
+
+class ParetoModel(BaseModel):
+    """
+    Example:
+    >>> np.random.seed(1)
+    >>> a = np.random.randint(110000,120000,2)
+    >>> b = np.random.randint(20000, 80000, 3)
+    >>> c = np.random.randint(2000, 8000, 5)
+    >>> df = pd.DataFrame({
+    'id': np.arange(1, 11),
+    'M':np.append(np.append(a,b),c)
+    })
+    >>> pm=ParetoModel()
+    >>> pm.load_data(df)
+    >>> pm.unleash()
+    >>> pm.res
+        id         M  Accumulate  Percent Class
+    0   2  115192.0    115192.0   26.37%     A
+    1   1  110235.0    225427.0   51.60%     A
+    2   4   70057.0    295484.0   67.64%     A
+    3   5   63723.0    359207.0   82.23%     B
+    4   3   52511.0    411718.0   94.25%     C
+    5   7    7056.0    418774.0   95.87%     C
+    6   9    6225.0    424999.0   97.29%     C
+    7   6    4895.0    429894.0   98.41%     C
+    8  10    4797.0    434691.0   99.51%     C
+    9   8    2144.0    436835.0  100.00%     C
+    >>> pm.results[1]
+                                    ID Count_Percent Money_Percent
+    Class                                                           
+    A                      '2', '1', '4'        30.00%        67.64%
+    B                                '5'        10.00%        14.59%
+    C      '3', '7', '9', '6', '10', '8'        60.00%        17.77%
+    >>> pm.visualize()
+    """
+    def __init__(self,metrics='ABC'):
+        super().__init__()
+        self.metrics = metrics
+
+    def load_data(self, df: pd.DataFrame):
+        return super().load_data(df)
+
+    @staticmethod
+    def between_score(x,ref):
+        if ref=='ABC':
+            if x<0.8:
+                return 'A'
+            elif 0.8<=x<0.9:
+                return 'B'
+            else:
+                return 'C'
+        else:
+            if x<0.8:
+                return '1'
+            else:
+                return '2'
+
+    def unleash(self,percent=True):
+        self.df.columns=['id','M']
+        self.df['id']=self.df['id'].astype(str)
+        self.df['M']=self.df['M'].astype(float)
+        self.res=self.df.sort_values('M',ascending=False).reset_index(drop=True)
+        self.res['Accumulate']=self.res['M'].cumsum() 
+        # Arithmetic is modular when using integer types, and no error is raised on overflow.
+        self.res['Percent']= self.res['Accumulate']/self.res['M'].sum()
+        self.res['Class']=self.res['Percent'].\
+            apply(lambda x:self.between_score(x,ref=self.metrics))
+        '''result2'''
+        I=self.res.groupby('Class')['id'].agg([lambda x:list(x),'count'])
+        S=self.res.groupby('Class')['M'].agg(['sum'])
+        _tmp=I.join(S)
+        _tmp.columns=['ID','Count_Percent','Money_Percent']
+        _tmp['ID']=_tmp['ID'].apply(lambda x:str(x)[1:-1])
+        _tmp['Count_Percent']=_tmp['Count_Percent']/_tmp['Count_Percent'].sum()
+        _tmp['Money_Percent']=_tmp['Money_Percent']/_tmp['Money_Percent'].sum()
+        if percent:
+            self.res['Percent']= self.res['Percent'].\
+                apply(lambda x: format(x, '.2%'))
+            _tmp['Count_Percent']= _tmp['Count_Percent'].\
+                apply(lambda x: format(x, '.2%'))
+            _tmp['Money_Percent']= _tmp['Money_Percent'].\
+                apply(lambda x: format(x, '.2%'))
+        self.results=(self.res,_tmp)
+
+    def visualize(self,savefig=False,**kwargs):
+        ax=plot_setting()
+        plot_bar(df=self.res,x='id',height='M')
+        ax2=ax.twinx()
+        ax2.plot(self.res['Percent'].str[:-1].astype(float)*0.01,color='orange',marker='o')
+        plt.axhline(y=0.8,ls='--',color='green')
+        if self.metrics=='ABC':plt.axhline(y=0.9,ls='--',color='blue')
+        if savefig:plot_savefig(title='Pareto_plot',**kwargs)
+        
+  
+        
