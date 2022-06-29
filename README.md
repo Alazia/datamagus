@@ -50,5 +50,5 @@ id
 >>> rfm.show()
 ```
 **RFM Visualization**
-![RFM_donut](/data/pic/RFM_donut.png)
-![RFM_bar](/data/pic/RFM_bar.png)
+
+<img src="./data/pic/RFM_donut.png" width="50%"><img src="./data/pic/RFM_bar.png" width="50%">
