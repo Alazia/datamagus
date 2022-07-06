@@ -1,5 +1,6 @@
 # datamagus
-[![PyPI](https://img.shields.io/badge/PyPI-0.0.3-green)](https://pypi.org/project/datamagus/)</br>
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/alazia/datamagus/datamagus.py) [![PyPI](https://img.shields.io/badge/PyPI-0.0.3-green)](https://pypi.org/project/datamagus/)
+
 Packages and API interface for basic data analysis processing, graphing and modeling, and practical use.
 
 
