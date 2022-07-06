@@ -11,7 +11,6 @@ pip install datamagus
 The datamagus model module contains several analysis models, including RFM, Pareto, etc.
 
 #### RFM Example
-
 Example 1: In most cases the data we use to study customer value is based on order sales, consisting of user id,transaction time and transaction amount.
 ```python
 # https://www.kaggle.com/datasets/regivm/retailtransactiondata?select=Retail_Data_Transactions.csv
@@ -46,7 +45,7 @@ Example 2: When we have data in RFM format.
 >>> rfm=RFMModel()
 >>> rfm.load_data(df)
 >>> rfm.unleash()
->>> rfm.rfm_score
+>>> rfm.res
     R   F     M  R_score  F_score  M_score     RFM
 id                                                   
 1      1  93  3841        2        2        1  一般价值客户
@@ -54,12 +53,10 @@ id
 3      7  31  4474        1        1        1  一般挽留客户
 >>> rfm.visualize()
 ```
-**RFM Visualization**
+<img src="./data/pic/RFM_bar.png" width="50%">
+<img src="./data/pic/RFM_donut.png" width="50%">
 
-<img src="./data/pic/RFM_bar.png" width="70%">
-<img src="./data/pic/RFM_donut.png" width="70%">
-
-#### Pareto 
+#### Pareto (ABC)
 ```python
 >>> np.random.seed(1)
 >>> a = np.random.randint(110000,120000,2)
@@ -92,7 +89,5 @@ B                                '5'        10.00%        14.59%
 C      '3', '7', '9', '6', '10', '8'        60.00%        17.77%
 >>> pm.visualize()
 ```
-**Pareto Visualization**
-
-<img src="./data/pic/Pareto_plot.png" width="70%">
+<img src="./data/pic/Pareto_plot.png" width="50%">
 

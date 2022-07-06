@@ -298,5 +298,15 @@ class ParetoModel(BaseModel):
         if self.metrics=='ABC':plt.axhline(y=0.9,ls='--',color='blue')
         if savefig:plot_savefig(title='Pareto_plot',**kwargs)
         
-  
-        
+
+class AARRRModel(BaseModel):
+    #TODO
+    pass
+
+class KANOModel(BaseModel):
+    #TODO
+    pass
+
+class BostonModel(BaseModel):
+    #TODO
+    pass
