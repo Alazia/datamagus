@@ -1,5 +1,5 @@
 # DataMagus
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/alazia/datamagus/main/datamagus.py) [![PyPI](https://img.shields.io/badge/PyPI-0.0.3-green)](https://pypi.org/project/datamagus/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/alazia/datamagus/main/datamagus.py) [![PyPI](https://img.shields.io/badge/PyPI-0.0.4-green)](https://pypi.org/project/datamagus/)
 
 DataMagus is a tool for data analysis that contains integrated methods for data cleaning and processing based on numpy, pandas packages, and also visualization methods based on matplotlib, seaborn, and plotly packages. Users can use data analysis models, such as RFM, Pareto, etc. to input data directly and get automated processed results and visual presentation; they can also use [streamit website](https://share.streamlit.io/alazia/datamagus/main/datamagus.py) for interactive analysis. In addition, DataMagus also provides API interface, users can build locally or use the Flask server provided by the author.
 
@@ -17,6 +17,8 @@ Example 1: In most cases the data we use to study customer value is based on ord
 ```python
 # https://www.kaggle.com/datasets/regivm/retailtransactiondata?select=Retail_Data_Transactions.csv
 >>> from datamagus.model import RFMModel
+>>> import numpy as np
+>>> import pandas as pd
 >>> rfm=RFMModel()
 >>> df=pd.read_csv('https://raw.githubusercontent.com/Alazia/datamagus/main/data/csv/Retail_Data_Transactions.csv') 
     customer_id trans_date  tran_amount
@@ -60,6 +62,9 @@ id
 
 #### Pareto (ABC)
 ```python
+>>> from datamagus.model import ParetoModel
+>>> import numpy as np
+>>> import pandas as pd
 >>> np.random.seed(1)
 >>> a = np.random.randint(110000,120000,2)
 >>> b = np.random.randint(20000, 80000, 3)

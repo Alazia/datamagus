@@ -1,5 +1,5 @@
 # DataMagus
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/alazia/datamagus/main/datamagus.py) [![PyPI](https://img.shields.io/badge/PyPI-0.0.3-green)](https://pypi.org/project/datamagus/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/alazia/datamagus/main/datamagus.py) [![PyPI](https://img.shields.io/badge/PyPI-0.0.4-green)](https://pypi.org/project/datamagus/)
 
 Packages and API interface for basic data analysis processing, graphing and modeling, and practical use.
 
@@ -13,6 +13,9 @@ The datamagus model module contains several analysis models, including RFM, Pare
 
 #### Pareto (ABC)
 ```python
+>>> from datamagus.model import ParetoModel
+>>> import numpy as np
+>>> import pandas as pd
 >>> np.random.seed(1)
 >>> a = np.random.randint(110000,120000,2)
 >>> b = np.random.randint(20000, 80000, 3)
