@@ -55,8 +55,8 @@ id
 3      7  31  4474        1        1        1  一般挽留客户
 >>> rfm.visualize()
 ```
-<img src="https://github.com/Alazia/datamagus/tree/main/data/pic/RFM_bar.png" width="50%">
-<img src="https://github.com/Alazia/datamagus/tree/main/data/pic/RFM_donut.png" width="50%">
+<img src="https://raw.githubusercontent.com/Alazia/datamagus/main/data/pic/RFM_bar.png" width="50%">
+<img src="https://raw.githubusercontent.com/Alazia/datamagus/main/data/pic/RFM_donut.png" width="50%">
 
 #### Pareto (ABC)
 ```python
@@ -91,5 +91,5 @@ B                                '5'        10.00%        14.59%
 C      '3', '7', '9', '6', '10', '8'        60.00%        17.77%
 >>> pm.visualize()
 ```
-<img src="https://github.com/Alazia/datamagus/tree/main/data/pic/Pareto_plot.png" width="50%">
+<img src="https://raw.githubusercontent.com/Alazia/datamagus/main/data/pic/Pareto_plot.png" width="50%">
 

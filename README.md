@@ -44,5 +44,5 @@ B                                '5'        10.00%        14.59%
 C      '3', '7', '9', '6', '10', '8'        60.00%        17.77%
 >>> pm.visualize()
 ```
-<img src="./data/pic/Pareto_plot.png" width="50%">
+<img src="https://raw.githubusercontent.com/Alazia/datamagus/main/data/pic/Pareto_plot.png" width="50%">
 
