@@ -17,7 +17,7 @@ Example 1: In most cases the data we use to study customer value is based on ord
 # https://www.kaggle.com/datasets/regivm/retailtransactiondata?select=Retail_Data_Transactions.csv
 >>> from datamagus.model import RFMModel
 >>> rfm=RFMModel()
->>> df=pd.read_csv('https://raw.githubusercontent.com/Alazia/datamagus/main/src/test/Retail_Data_Transactions.csv') 
+>>> df=pd.read_csv('https://raw.githubusercontent.com/Alazia/datamagus/main/data/csv/Retail_Data_Transactions.csv') 
     customer_id trans_date  tran_amount
 0           CS5295  11-Feb-13           35
 1           CS4768  15-Mar-15           39
